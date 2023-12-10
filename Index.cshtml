@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Ticket>
+
+<div class="row">
+    <div class="col-md-2">
+        <form asp-action="Filter" method="post">
+            <div class="mb-3">
+                <label class="form-label">Ticket:</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Tickets,
+                        "TicketId", "Name", ViewBag.Filters.TicketId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Status:</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Statuses,
+                        "StatusId", "Name", ViewBag.Filters.StatusId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Point Value:</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.PointValues,
+                        "PointValueId", "Name", ViewBag.Filters.PointValueId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Sprint:</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Sprints,
+                        "SprintId", "Name", ViewBag.Filters.SprintId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filters</button>
+            <a asp-action="Index" asp-route-id="" class="btn btn-primary">
+                Clear
+            </a>
+        </form>
+    </div>
+    <div class="col-md-10">
+        <form asp-action="MarkComplete" method="post"
+              asp-route-id="@ViewBag.Filters.FilterString">
+
+            <table class="table table-bordered table-striped mt-2">
+                <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Ticket</th>
+                        <th>Status</th>
+                        <th>Point Value</th>
+                        <th>Sprint</th>
+                        <th class="w-25"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Ticket task in Model)
+                    {
+                        bool overdue = task.DueDate.HasValue && task.DueDate < DateTime.Now;
+                        string overdueClass = overdue ? "bg-warning" : "";
+                        <tr>
+                            <td>@task.Name</td>
+                            <td class="@overdueClass">
+                                @task.DueDate?.ToShortDateString()
+                            </td>
+                            <td class="@overdueClass">@task.Status.Name</td>
+                            <td>
+                                @if (task.StatusId == "inprogress")
+                                {
+                                    <button type="submit"
+                                            class="btn btn-primary btn-sm"
+                                            name="@nameof(Ticket.TicketId)"
+                                            value="@task.TicketId">
+                                        Mark Completed
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+
+        <form asp-action="DeleteComplete" method="post"
+              asp-route-id="@ViewBag.Filters.FilterString">
+            <a asp-action="Add" class="btn btn-primary">
+                Add new new task
+            </a>
+            <button type="submit" class="btn btn-primary">
+                Delete completed task
+            </button>
+        </form>
+    </div>
+</div>

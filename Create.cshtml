@@ -1,0 +1,28 @@
+﻿@model TicketingApp.Models.Ticket
+
+<h1>Create Ticket</h1>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name">Title:</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Sprint.SprintNumber">Sprint Number:</label>
+        <input asp-for="Sprint.SprintNumber" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="PointValue.Name">Point Value</label>
+        <input asp-for="PointValue.Name" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Status.Name">Status</label>
+        <select asp-for="Status.Name" class="form-control">
+            <option value="ToDo">To Do</option>
+            <option value="InProgress">In Progress</option>
+            <option value="QA">Quality Assurance</option>
+            <option value="Done">Done</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
