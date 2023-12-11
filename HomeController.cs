@@ -7,8 +7,12 @@ namespace TicketingApp.Controllers
 {
     public class HomeController : Controller
     {
-        private TicketDb context;
-        public HomeController(TicketDb ctx) => context = ctx;
+        private readonly TicketDb _context;
+        public HomeController(TicketDb context) 
+        {
+            _context = context;
+        }
+        
 
         // A static list to store tickets (this is for demonstration purposes, and you might want to use a database in a real application)
         private static List<Ticket> tickets = new List<Ticket>();
